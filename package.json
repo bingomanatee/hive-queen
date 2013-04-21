@@ -1,0 +1,25 @@
+{
+	"name":            "hive-queen",
+	"description":     "a directory spawner for hive-mvc",
+	"version":         "0.0.1",
+	"private":         false,
+	"scripts":         {
+		"start": "node index"
+	},
+	"dependencies":    {
+		"underscore": "*",
+		"async":      "~0.1.22",
+		"gate":       "*",
+		"mkdirp":     ">=0.3.4",
+		"rmdir":      ">0.1"
+	},
+	"devDependencies": {
+		"tap": ">=0.3"
+	},
+	"main":            "lib/index.js",
+	"keyworkds":       [
+		"hive",
+		"spawn"
+
+	]
+}
