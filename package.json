@@ -1,25 +1,28 @@
 {
-	"name":            "hive-queen",
-	"description":     "a directory spawner for hive-mvc",
-	"version":         "0.0.1",
-	"private":         false,
-	"scripts":         {
-		"start": "node index"
-	},
-	"dependencies":    {
-		"underscore": "*",
-		"async":      "~0.1.22",
-		"gate":       "*",
-		"mkdirp":     ">=0.3.4",
-		"rmdir":      ">0.1"
-	},
-	"devDependencies": {
-		"tap": ">=0.3"
-	},
-	"main":            "lib/index.js",
-	"keyworkds":       [
-		"hive",
-		"spawn"
-
-	]
+  "name": "hive-queen",
+  "description": "a directory spawner for hive-mvc",
+  "version": "0.0.1",
+  "private": false,
+  "scripts": {
+    "test": "tap ./test",
+    "start": "node index"
+  },
+  "dependencies": {
+    "underscore": "*",
+    "async": "~0.1.22",
+    "gate": "*",
+    "mkdirp": ">=0.3.4",
+    "rmdir": ">0.1"
+  },
+  "devDependencies": {
+    "tap": ">=0.3",
+    "chai": "~1.5.0",
+    "rmdir": "~1.0.0",
+    "gate": "~0.3.0"
+  },
+  "main": "lib/index.js",
+  "keyworkds": [
+    "hive",
+    "spawn"
+  ]
 }
