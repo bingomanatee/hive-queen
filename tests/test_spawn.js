@@ -130,7 +130,6 @@ function _test_suite() {
 
 			}, function () {
 				compare_dirs(frame_root, path.resolve(root, 'spawn_site_with_single_frame_with_single_hive_and_two_actions', 'frames'), t, function () {
-					return t.end();
 
 					rmdir(frame_root, function () {
 						t.end();
