@@ -22,24 +22,24 @@ function _test_suite() {
 
 	//@TODO: use filecompare
 
-	function compare_dirs(a, b, t, cb, msg){
+	function compare_dirs(a, b, t, cb, msg) {
 		if (_DEBUG_CD) console.log("start comparing \n   %s \n   %s", a, b);
 		var gate = Gate.create();
 		var lg = gate.latch();
 
-		gate.await(function(){
+		gate.await(function () {
 			if (_DEBUG_CD) console.log('done comparing %s and %s', a, b);
 			cb();
 		});
 
-		fs.readdir(a, function(err, a_contents){
+		fs.readdir(a, function (err, a_contents) {
 			if (err) throw err;
-			fs.readdir(b, function(err, b_contents){
+			fs.readdir(b, function (err, b_contents) {
 				if (err) throw err;
-				t.same(a_contents, b_contents,  util.format(
+				t.same(a_contents, b_contents, util.format(
 					'directory %s is the same as directory %s', a, b) + (msg || ''));
 
-				b_contents.forEach(function(b_file){
+				b_contents.forEach(function (b_file) {
 					var a_path = path.resolve(a, b_file);
 					var b_path = path.resolve(b, b_file);
 
@@ -49,18 +49,18 @@ function _test_suite() {
 					var l2g = gate.latch();
 
 					var as, bs;
-					fs.stat(b_path, function(err, stat){
+					fs.stat(b_path, function (err, stat) {
 						as = stat;
 						la();
 					});
 
-					fs.stat(a_path, function(err, stat){
+					fs.stat(a_path, function (err, stat) {
 						bs = stat;
 						lb();
 					});
 
-					gate2.await(function(){
-						if (as.isDirectory() && bs.isDirectory()){
+					gate2.await(function () {
+						if (as.isDirectory() && bs.isDirectory()) {
 							compare_dirs(a_path, b_path, t, gate.latch(), msg);
 						}
 						l2g();
@@ -80,8 +80,8 @@ function _test_suite() {
 				}
 
 			}, function () {
-				compare_dirs(frame_root, path.resolve(root, 'spawn_site_1', 'frames'), t, function(){
-					rmdir(frame_root, function(){
+				compare_dirs(frame_root, path.resolve(root, 'spawn_site_single_frame', 'frames'), t, function () {
+					rmdir(frame_root, function () {
 						t.end();
 					})
 				}, 'test single frame spawn comparison');
@@ -94,18 +94,45 @@ function _test_suite() {
 			q.spawn(frame_root, {
 				frames: {
 					alpha: {
-					       hives: {
-					              phi: {
+						hives: {
+							phi: {
 
-					              }
-					       }
+							}
+						}
 					}
 				}
 
 			}, function () {
-				compare_dirs(frame_root, path.resolve(root, 'spawn_site_with_single_frame_with_single_hive', 'frames'), t, function(){
+				compare_dirs(frame_root, path.resolve(root, 'spawn_site_with_single_frame_with_single_hive', 'frames'), t, function () {
+					rmdir(frame_root, function () {
+						t.end();
+					})
+				}, 'test single frame spawn comparison');
+			})
+		}); // end tap.test 2
+	}
+
+	if (true) {
+		tap.test('test single_frame with single hive and two actions', function (t) {
+			q.spawn(frame_root, {
+				frames: {
+					alpha: {
+						hives: {
+							phi: {
+								actions: [
+									'bob',
+									'ray'
+								]
+							}
+						}
+					}
+				}
+
+			}, function () {
+				compare_dirs(frame_root, path.resolve(root, 'spawn_site_with_single_frame_with_single_hive_and_two_actions', 'frames'), t, function () {
 					return t.end();
-					rmdir(frame_root, function(){
+
+					rmdir(frame_root, function () {
 						t.end();
 					})
 				}, 'test single frame spawn comparison');
