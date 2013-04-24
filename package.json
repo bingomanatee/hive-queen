@@ -18,7 +18,12 @@
     "tap": ">=0.3",
     "chai": "~1.5.0",
     "rmdir": "~1.0.0",
-    "gate": "~0.3.0"
+    "gate": "~0.3.0",
+    "dank-copyfile": "0.0.1",
+    "filecompare": "0.0.2",
+    "directory-copy": "0.0.4",
+    "diff": "~1.0.4",
+    "express": "~3.2.0"
   },
   "main": "lib/index.js",
   "keyworkds": [

@@ -1,0 +1,23 @@
+{
+    "name": "bob",
+	"foo": "bar",
+    "routes": {
+        "get": [
+            "*/bob"
+        ],
+        "put": [
+            "*/bob"
+        ],
+        "post": [
+            "*/bob"
+        ],
+        "delete": [
+            "*/bob"
+        ]
+    },
+    "static": {
+        "/js": "*/js",
+        "/css": "*/css",
+        "/img": "*/img"
+    }
+}

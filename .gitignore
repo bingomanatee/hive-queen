@@ -2,3 +2,4 @@
 .DS_Store
 /test_resources/spawn_site/frames
 /test_resources/spawn_site_single_frame/frames/
+/node_modules
