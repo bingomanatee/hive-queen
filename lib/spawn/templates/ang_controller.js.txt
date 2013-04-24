@@ -1,0 +1,10 @@
+(function(root){
+
+	var app = angular.module('app', ['ui']);
+
+	function <%= con_name %>($scope){
+	}
+
+	app.controller('<%= con_name %>', <%= con_name %>);
+
+})(window);
