@@ -50,25 +50,25 @@ function _test_suite() {
 							'barney'
 						]
 					},
-					hives:    {
-						phi:      {
+					hives:     {
+						phi: {
 							resources: {
 								mixin: [
 									'ethel',
 									'merman'
 								]
 							},
-							actions: [
-								{name:        'bob',
+							actions:   [
+								{name:         'bob',
 									resources: {
 										model: [
 											{name: 'apples'},
 											{
-												name: 'bakers',
+												name:       'bakers',
 												model_type: 'hive_model'
 											},
 											{
-												name: 'cannibals',
+												name:       'cannibals',
 												model_type: 'hive_mongoose_model'
 											}
 										]
@@ -83,43 +83,12 @@ function _test_suite() {
 		};
 
 		tap.test('test resources', function (t) {
-			q.spawn(resources_root, config, function () {
+			q.spawn(frame_root, config, function () {
 
-				return	t.end();
+				compare_dirs(frame_root, resources_root, t, function () {
+					rmdir(frame_root, _.bind(t.end, t));
 
-				var edited_frames = 'spawn_site_with_single_frame_with_single_hive_and_two_actions_edited/frames';
-				var comp_root = path.resolve(root, 'spawn_site_with_single_frame_with_single_hive_and_two_actions', 'frames');
-				var comp_edited_root = path.resolve(root, edited_frames);
-
-				compare_dirs(frame_root, comp_root, t, function () {
-					var action_path = 'alpha/hives/phi/actions/bob';
-					var pa = path.resolve(comp_edited_root, action_path);
-					var pb = path.resolve(frame_root, action_path);
-					if (_DEBUG) console.log("\n\n COPYING %s \n\nto %s \n\n", pa, pb);
-
-					dcopy(
-						{
-							src:  pa,
-							dest: pb
-						},
-
-						function (err) {
-							if (err) {
-								throw err;
-							}
-							compare_dirs(frame_root, comp_edited_root, t, function () {
-
-								q.spawn(frame_root, config, function () {
-									compare_dirs(frame_root, comp_edited_root, t, function () {
-										rmdir(frame_root, function () {
-											t.end();
-										})
-									});
-								});
-							}, 'comparing copied dirs - BEFORE running spawn again');
-						});
-
-				}, 'test single frame spawn comparison');
+				}, 'test resource spawning');
 			})
 		}); // end tap.test 2
 	}
