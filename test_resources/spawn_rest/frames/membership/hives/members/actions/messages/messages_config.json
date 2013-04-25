@@ -1,0 +1,20 @@
+{
+    "name": "messages",
+    "rest": true,
+    "model_type": "hive_model",
+    "model_name": "Messages",
+    "routes": {
+        "get": [
+            "*/messages"
+        ],
+        "put": [
+            "*/messages"
+        ],
+        "post": [
+            "*/messages"
+        ],
+        "delete": [
+            "*/messages"
+        ]
+    }
+}

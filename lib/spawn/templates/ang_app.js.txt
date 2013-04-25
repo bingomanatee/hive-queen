@@ -1,0 +1,4 @@
+(function(root){
+	angular.module('<%= name %>', [<% deps.forEach(function(dep, i){ %>	'<%= dep %>' <%= i < deps.length - 1 ? ', ' : '' %>
+	<% }) %>]);
+})(window);

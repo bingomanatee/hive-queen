@@ -1,10 +1,10 @@
 (function(root){
 
-	var app = angular.module('app', ['ui']);
+	var <%= app.name %> = angular.module('<%= app.name %>');
 
-	function <%= con_name %>($scope){
+	function <%= con.name %>($scope){
 	}
 
-	app.controller('<%= con_name %>', <%= con_name %>);
+	<%= app.name %>.controller('<%= con.name %>', <%= con.name %>);
 
 })(window);

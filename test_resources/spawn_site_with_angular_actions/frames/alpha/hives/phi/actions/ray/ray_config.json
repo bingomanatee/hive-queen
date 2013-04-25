@@ -1,0 +1,33 @@
+{
+    "name": "ray",
+    "angular": {
+        "controller": {
+            "name": "Albert"
+        },
+        "app": {
+            "name": "Brooks",
+            "deps": [
+                "ui"
+            ]
+        }
+    },
+    "routes": {
+        "get": [
+            "*/ray"
+        ],
+        "put": [
+            "*/ray"
+        ],
+        "post": [
+            "*/ray"
+        ],
+        "delete": [
+            "*/ray"
+        ]
+    },
+    "static": {
+        "/js": "*/js",
+        "/css": "*/css",
+        "/img": "*/img"
+    }
+}

@@ -1,0 +1,20 @@
+{
+    "name": "acl",
+    "rest": true,
+    "model_type": "mongoose",
+    "model_name": "Members_ACL",
+    "routes": {
+        "get": [
+            "*/acl"
+        ],
+        "put": [
+            "*/acl"
+        ],
+        "post": [
+            "*/acl"
+        ],
+        "delete": [
+            "*/acl"
+        ]
+    }
+}

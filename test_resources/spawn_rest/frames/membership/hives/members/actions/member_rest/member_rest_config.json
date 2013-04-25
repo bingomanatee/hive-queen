@@ -1,0 +1,19 @@
+{
+    "name": "member_rest",
+    "rest": true,
+    "model_name": "Members",
+    "routes": {
+        "get": [
+            "*/member_rest"
+        ],
+        "put": [
+            "*/member_rest"
+        ],
+        "post": [
+            "*/member_rest"
+        ],
+        "delete": [
+            "*/member_rest"
+        ]
+    }
+}
