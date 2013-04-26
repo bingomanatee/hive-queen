@@ -1,0 +1,17 @@
+{
+    "name": "ray",
+    "routes": {
+        "get": [
+            "*/ray"
+        ],
+        "put": [
+            "*/ray"
+        ],
+        "post": [
+            "*/ray"
+        ],
+        "delete": [
+            "*/ray"
+        ]
+    }
+}

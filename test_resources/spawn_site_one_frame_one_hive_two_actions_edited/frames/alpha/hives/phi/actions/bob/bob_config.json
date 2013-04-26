@@ -1,0 +1,8 @@
+{
+    "name": "bob",
+    "routes": {
+        "get": [
+            "*/bob"
+        ]
+    }
+}

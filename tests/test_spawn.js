@@ -81,7 +81,7 @@ function _test_suite() {
 		}); // end tap.test 2
 	}
 
-	if (false) {
+	if (true) {
 		var config = {
 			frames: {
 				alpha: {
@@ -98,17 +98,22 @@ function _test_suite() {
 
 		};
 
-		tap.test('test single_frame with single hive and two actions', function (t) {
-			q.spawn(frame_root, config, function () {
-				var edited_frames = 'spawn_site_with_single_frame_with_single_hive_and_two_actions_edited/frames';
-				var comp_root = path.resolve(root, 'spawn_site_with_single_frame_with_single_hive_and_two_actions', 'frames');
-				var comp_edited_root = path.resolve(root, edited_frames);
+		var base_name = 'spawn_site_one_frame_one_hive_two_actions';
+		var edited_frames = base_name + '_edited';
+		var comp_root = path.resolve(root, base_name, 'frames');
+		var comp_edited_root = path.resolve(root, edited_frames, 'frames');
 
+		tap.test('repeated execution preserving edits', function (t) {
+
+			q.spawn(frame_root, config, function () {
+
+				if (_DEBUG) console.log("comparing %s and \n %s", frame_root, comp_root);
 				compare_dirs(frame_root, comp_root, t, function () {
+
 					var action_path = 'alpha/hives/phi/actions/bob';
 					var pa = path.resolve(comp_edited_root, action_path);
 					var pb = path.resolve(frame_root, action_path);
-					if (_DEBUG) console.log("\n\n COPYING %s \n\nto %s \n\n", pa, pb);
+					if (_DEBUG || 1) console.log("\n\n COPYING %s \n\nto %s \n\n", pa, pb);
 
 					dcopy(
 						{
@@ -132,7 +137,7 @@ function _test_suite() {
 							}, 'comparing copied dirs - BEFORE running spawn again');
 						});
 
-				}, 'test single frame spawn comparison');
+				}, 'test single frame spawn comparison', root);
 			})
 		}); // end tap.test 2
 	}
@@ -184,66 +189,6 @@ function _test_suite() {
 		}); // end tap.test 2
 	}
 
-	if (true) {
-		var config = {
-			frames: {
-				membership: {
-					hives: {
-						members: {
-							actions: [
-								{
-									name: 'member_rest',
-									rest: true,
-									model_name: 'Members'
-								},
-								{
-									name: 'acl',
-									rest: true,
-									model_type: 'mongoose',
-									model_name: 'Members_ACL'
-								},
-
-								{
-									name: 'messages',
-									rest: true,
-									model_type: 'hive_model',
-									model_name: 'Messages'
-								}
-							]
-						}
-					}
-				}
-			}
-
-		};
-
-		if (false){
-
-		tap.test('test rest spawners', function (t) {
-			var rest_path = 'spawn_rest';
-			var comp_root = path.resolve(root, rest_path, 'frames');
-			q.spawn(comp_root, config, function () {
-
-				return t.end();
-
-				compare_dirs(frame_root, comp_root, t, function () {
-					t.end();
-				}, 'created rest actions');
-			})
-		}); // end tap.test 2
-	}
-
-		if (true){
-			tap.test('test rest application', function(t){
-
-				require(path.resolve(root, 'spawn_rest/app'))(function(err, apiary){
-					setTimeout(function(){
-
-					}, 1000);
-				});
-			})
-		}
-	}
 }
 
 fs.exists(frame_root, function (exists) {
