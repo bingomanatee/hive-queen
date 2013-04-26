@@ -9,7 +9,7 @@ var q = require('./../lib/index');
 var copy = require('dank-copyfile');
 var dcopy = require('directory-copy');
 var mkdirp = require('mkdirp');
-var compare_dirs = require('./../test_resources/node_modules/compare_dirs')
+var ndd = require('node-dir-diff');
 
 var _DEBUG = false;
 
@@ -85,7 +85,8 @@ function _test_suite() {
 		tap.test('test resources', function (t) {
 			q.spawn(frame_root, config, function () {
 
-				compare_dirs(frame_root, resources_root, t, function () {
+				new ndd.Dir_Diff([frame_root, resources_root]).compare(function (err, report) {
+					t.equal(report.deviation, 0, 'spawned_resources');
 					rmdir(frame_root, _.bind(t.end, t));
 
 				}, 'test resource spawning');

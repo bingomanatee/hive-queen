@@ -1,5 +1,8 @@
 {
     "name": "bob",
+    "angular": {
+        "controller": "FooController"
+    },
     "routes": {
         "get": [
             "*/bob"
@@ -13,10 +16,5 @@
         "delete": [
             "*/bob"
         ]
-    },
-    "static": {
-        "/js": "*/js",
-        "/css": "*/css",
-        "/img": "*/img"
     }
 }

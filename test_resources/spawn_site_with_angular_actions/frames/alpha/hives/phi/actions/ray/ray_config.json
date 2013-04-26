@@ -7,7 +7,9 @@
         "app": {
             "name": "Brooks",
             "deps": [
-                "ui"
+                "ui",
+                "foo",
+                "bar"
             ]
         }
     },
@@ -24,10 +26,5 @@
         "delete": [
             "*/ray"
         ]
-    },
-    "static": {
-        "/js": "*/js",
-        "/css": "*/css",
-        "/img": "*/img"
     }
 }

@@ -9,7 +9,7 @@ var q = require('./../lib/index');
 var copy = require('dank-copyfile');
 var dcopy = require('directory-copy');
 var mkdirp = require('mkdirp');
-var compare_dirs = require('./../test_resources/node_modules/compare_dirs')
+var ndd = require('node-dir-diff');
 
 var _DEBUG = false;
 
@@ -41,7 +41,7 @@ function _test_suite() {
 
 	//@TODO: use filecompare
 
-	if (false) {
+	if (true) {
 		tap.test('test single frame spawn', function (t) {
 			q.spawn(frame_root, {
 				frames: {
@@ -49,7 +49,11 @@ function _test_suite() {
 				}
 
 			}, function () {
-				compare_dirs(frame_root, path.resolve(root, 'spawn_site_single_frame', 'frames'), t, function () {
+				new ndd.Dir_Diff(
+					[frame_root, path.resolve(root, 'spawn_site_single_frame', 'frames')]
+					, 'full'
+				).compare(function (err, report) {
+					t.equal(report.deviation, 0, 'single frame content matches expectations');
 					rmdir(frame_root, function () {
 						t.end();
 					})
@@ -58,7 +62,7 @@ function _test_suite() {
 		}) // end tap.test 1
 	}
 
-	if (false) {
+	if (true) {
 		tap.test('test single_frame with single hive', function (t) {
 			q.spawn(frame_root, {
 				frames: {
@@ -72,7 +76,10 @@ function _test_suite() {
 				}
 
 			}, function () {
-				compare_dirs(frame_root, path.resolve(root, 'spawn_site_with_single_frame_with_single_hive', 'frames'), t, function () {
+
+				new ndd.Dir_Diff([frame_root, path.resolve(root, 'spawn_site_with_single_frame_with_single_hive', 'frames')]).
+					compare(function (err, report) {
+						t.equal(report.deviation, 0, 'spawned site meets expectations');
 					rmdir(frame_root, function () {
 						t.end();
 					})
@@ -108,8 +115,8 @@ function _test_suite() {
 			q.spawn(frame_root, config, function () {
 
 				if (_DEBUG) console.log("comparing %s and \n %s", frame_root, comp_root);
-				compare_dirs(frame_root, comp_root, t, function () {
-
+				new ndd.Dir_Diff([frame_root, comp_root], 'full').compare(function (err, report) {
+					t.equal(report.deviation, 0, 'spawn and one hive two action the same');
 					var action_path = 'alpha/hives/phi/actions/bob';
 					var pa = path.resolve(comp_edited_root, action_path);
 					var pb = path.resolve(frame_root, action_path);
@@ -125,10 +132,12 @@ function _test_suite() {
 							if (err) {
 								throw err;
 							}
-							compare_dirs(frame_root, comp_edited_root, t, function () {
-
+							new ndd.Dir_Diff([frame_root, comp_edited_root]).compare(function (err, report) {
+								t.equal(report.deviation, 0, 'copying the edited directory shuold make the spawn site the same as the edited expectation');
 								q.spawn(frame_root, config, function () {
-									compare_dirs(frame_root, comp_edited_root, t, function () {
+									new ndd.Dir_Diff([frame_root, comp_edited_root]).compare(function (err, report) {
+										t.equal(report.deviation, 0, 'the edited files should not have been overridden by a re-spawn');
+
 										rmdir(frame_root, function () {
 											t.end();
 										})
@@ -137,12 +146,12 @@ function _test_suite() {
 							}, 'comparing copied dirs - BEFORE running spawn again');
 						});
 
-				}, 'test single frame spawn comparison', root);
+				});
 			})
 		}); // end tap.test 2
 	}
 
-	if (false) {
+	if (true) {
 		var config = {
 			frames: {
 				alpha: {
@@ -175,20 +184,18 @@ function _test_suite() {
 
 		};
 
-		tap.test('test single_frame with single hive and two actions', function (t) {
+		tap.test('test angular enabled action', function (t) {
 			var ang_frames = 'spawn_site_with_angular_actions';
 			var comp_root = path.resolve(root, ang_frames, 'frames');
-			q.spawn(comp_root, config, function () {
+			q.spawn(frame_root, config, function () {
 
-				return t.end();
-
-				compare_dirs(frame_root, comp_root, t, function () {
+				new ndd.Dir_Diff([frame_root, comp_root], 'full').compare(function (err, report) {
+					t.equal(report.deviation, 0, 'after spawning with angular');
 					t.end();
 				}, 'created angular action');
 			})
 		}); // end tap.test 2
 	}
-
 }
 
 fs.exists(frame_root, function (exists) {
