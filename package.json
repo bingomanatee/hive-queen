@@ -28,7 +28,8 @@
     "mongoose": "~3.6.7",
     "hive-mvc": "0.0.1",
     "hive-model-mongoose": "0.0.1",
-    "node-dir-diff": "0.0.1"
+    "node-dir-diff": "0.0.1",
+    "request": "~2.20.0"
   },
   "main": "lib/index.js",
   "keyworkds": [
