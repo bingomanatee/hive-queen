@@ -31,11 +31,8 @@ tap.test('test rest spawners', function (t) {
 	}
 
 	mkdirp(frame_root, function () {
-		console.log('ensured directory %s', frame_root);
 		rmdir(frame_root, function () {
-			console.log('... wiped dir');
 			mkdirp(frame_root, function () {
-				console.log('spawning...');
 				q.spawn(frame_root, config, function () {
 
 					require(path.join(app_root, '/app'))(3123, function (err, apiary, s) {

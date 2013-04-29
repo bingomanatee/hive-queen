@@ -16,7 +16,7 @@ var frame_3_path = 'spawn_site_3/frames';
 var frame_4_path = 'spawn_site_4/frames';
 var Gate = require('gate');
 
-var _DEBUG = true;
+var _DEBUG = false;
 
 /* *********************** TEST SCAFFOLDING ********************* */
 var root = path.resolve(__dirname, '../test_resources');
@@ -46,7 +46,7 @@ function _test_suite() {
 	//@TODO: use filecompare
 
 	if (true) {
-		tap.test('test single frame spawn', function (t) {
+		tap.test('spawn 1: test single frame spawn', function (t) {
 			var frame_root = path.resolve(root, frame_1_path);
 			mkdirp(frame_root, function () {
 				q.spawn(frame_root, {
@@ -56,7 +56,7 @@ function _test_suite() {
 
 				}, function () {
 					new ndd.Dir_Diff(
-						[frame_root, path.resolve(root, 'spawn_site_single_frame', 'frames')]
+						[frame_root, path.resolve(root, 'spawn_1_expect', 'frames')]
 						, 'full'
 					).compare(function (err, report) {
 							t.equal(report.deviation, 0, 'single frame content matches expectations');
@@ -70,22 +70,13 @@ function _test_suite() {
 	}
 
 	if (true) {
-		tap.test('test single_frame with single hive', function (t) {
+		tap.test('spawn 2: test single_frame with single hive', function (t) {
 			var frame_root = path.resolve(root, frame_2_path);
-			q.spawn(frame_root, {
-				frames: {
-					alpha: {
-						hives: {
-							phi: {
+			var frame_2_expect = path.resolve(root, 'spawn_2_expect', 'frames');
 
-							}
-						}
-					}
-				}
+			q.spawn(frame_root, require(path.resolve(root,'configs/spawn/spawn_2.json')), function () {
 
-			}, function () {
-
-				new ndd.Dir_Diff([frame_root, path.resolve(root, 'spawn_site_with_single_frame_with_single_hive', 'frames')]).
+				new ndd.Dir_Diff([frame_root, frame_2_expect]).
 					compare(function (err, report) {
 						t.equal(report.deviation, 0, 'spawned site meets expectations');
 						rmdir(frame_root, function () {
@@ -104,7 +95,7 @@ function _test_suite() {
 
 				var config = require(path.resolve(root, 'configs/spawn/preserve_edits.json'))
 
-				var base_name = 'spawn_site_one_frame_one_hive_two_actions';
+				var base_name = 'spawn_3_expect';
 				var edited_frames = base_name + '_edited';
 				var comp_root = path.resolve(root, base_name, 'frames');
 				var comp_edited_root = path.resolve(root, edited_frames, 'frames');
@@ -117,7 +108,7 @@ function _test_suite() {
 						var action_path = 'alpha/hives/phi/actions/bob';
 						var pa = path.resolve(comp_edited_root, action_path);
 						var pb = path.resolve(frame_root, action_path);
-						if (_DEBUG || 1) console.log("\n\n COPYING %s \n\nto %s \n\n", pa, pb);
+						if (_DEBUG) console.log("\n\n COPYING %s \n\nto %s \n\n", pa, pb);
 
 						dcopy(
 							{
@@ -152,7 +143,7 @@ function _test_suite() {
 
 		tap.test('test angular enabled action', function (t) {
 			var frame_root = path.resolve(root, frame_4_path);
-			var ang_frames = 'spawn_site_with_angular_actions';
+			var ang_frames = 'spawn_4_expect';
 			var comp_root = path.resolve(root, ang_frames, 'frames');
 			mkdirp(frame_root, function () {
 

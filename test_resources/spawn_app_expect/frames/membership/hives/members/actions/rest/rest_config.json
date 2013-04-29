@@ -1,0 +1,17 @@
+{
+    "name": "rest",
+    "routes": {
+        "get": [
+            "*/rest/:id?"
+        ],
+        "put": [
+            "*/rest/:id"
+        ],
+        "post": [
+            "*/rest"
+        ],
+        "delete": [
+            "*/rest/:id"
+        ]
+    }
+}

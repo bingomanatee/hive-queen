@@ -39,69 +39,23 @@ function stats(files, cb) {
 }
 
 function _test_suite() {
+	var config = require(path.resolve(root, 'configs/test_spawned_app.json'));
 
-	if (true) {
-		var config = {
-			frames: {
-				alpha: {
-					resources: {
-						view_helper: [
-							'fred',
-							'barney'
-						]
-					},
-					hives:     {
-						phi: {
-							resources: {
-								mixin: [
-									'ethel',
-									'merman'
-								]
-							},
-							actions:   [
-								{name:         'bob',
-									resources: {
-										model: [
-											{name: 'apples'},
-											{
-												name:       'bakers',
-												model_type: 'hive_model'
-											},
-											{
-												name:       'cannibals',
-												model_type: 'hive_mongoose_model'
-											}
-										]
-									}
-								}
-							]
-						}
-					}
-				}
-			}
+	tap.test('test resources', function (t) {
+		q.spawn(frame_root, config, function () {
 
-		};
+			new ndd.Dir_Diff([frame_root, resources_root]).compare(function (err, report) {
+				t.equal(report.deviation, 0, 'spawned_resources');
+				rmdir(frame_root, _.bind(t.end, t));
 
-		tap.test('test resources', function (t) {
-			q.spawn(frame_root, config, function () {
-
-				new ndd.Dir_Diff([frame_root, resources_root]).compare(function (err, report) {
-					t.equal(report.deviation, 0, 'spawned_resources');
-					rmdir(frame_root, _.bind(t.end, t));
-
-				}, 'test resource spawning');
-			})
-		}); // end tap.test 2
-	}
+			}, 'test resource spawning');
+		})
+	}); // end tap.test 2
 }
 
-fs.exists(frame_root, function (exists) {
-	if (exists) {
-		rmdir(frame_root, function (err, dirs, files) {
-			_test_suite();
-
-		})
-	} else {
+mkdirp(frame_root, function () {
+	rmdir(frame_root, function (err, dirs, files) {
 		_test_suite();
-	}
+
+	})
 });

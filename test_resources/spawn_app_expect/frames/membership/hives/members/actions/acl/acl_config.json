@@ -1,0 +1,17 @@
+{
+    "name": "acl",
+    "routes": {
+        "get": [
+            "*/acl/:id?"
+        ],
+        "put": [
+            "*/acl/:id"
+        ],
+        "post": [
+            "*/acl"
+        ],
+        "delete": [
+            "*/acl/:id"
+        ]
+    }
+}

@@ -1,0 +1,17 @@
+{
+    "name": "messages",
+    "routes": {
+        "get": [
+            "*/messages/:id?"
+        ],
+        "put": [
+            "*/messages/:id"
+        ],
+        "post": [
+            "*/messages"
+        ],
+        "delete": [
+            "*/messages/:id"
+        ]
+    }
+}
