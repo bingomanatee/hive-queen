@@ -1,0 +1,24 @@
+
+ 		<% if (model && model.schema) { %>
+ 		<% _.forEach(model.schema, function(field_def), key{ %>
+			<% if (_.isString(field_def)){ %>
+
+			data['<%= field_def %>'] = context['<%= field_def %>'];
+
+			<% } else if (_.isObject(field_def)){ %>
+
+			data['<%= field_def.name %>'] = context['<%= field_def.name %>'];
+
+			<% } else { %>
+			// strange field type <%= JSON.stringify(field_def) %> -- <%= key %>
+
+			<% } %>
+
+
+ 		<% }) %>
+
+ 		<% } else { %>
+
+ 		throw new Error ('!!!! extract fields from context ');
+
+ 		<% } %>

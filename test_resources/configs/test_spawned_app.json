@@ -1,0 +1,138 @@
+{
+	"frames": {
+		"membership": {
+			"resources": {
+				"model": [
+					{
+						"name":        "Members",
+						"model_type":  "hive_model",
+						"primary_key": "id",
+						"data":        [
+							{
+								"id":          1,
+								"member_name": "moe",
+								"password":    "chowderhead"
+							},
+							{
+								"id":          2,
+								"member_name": "steve",
+								"password":    "2wildandcrazyguys"
+							}
+						],
+						"schema":      [
+							{
+								"name": "member_name",
+								"type": "string"
+							},
+							{
+								"name": "password",
+								"type": "string"
+							}
+						]
+					},
+					{
+						"name":        "Members_ACL",
+						"model_type":  "hive_model",
+						"primary_key": "id",
+						"data":        [
+							{
+								"id":         1,
+								"member":     "moe",
+								"permission": "send_messages"
+							},
+							{
+								"id":         2,
+								"member":     "steve",
+								"permission": "blog"
+							}
+						],
+						"schema":      [
+							{
+								"member": "member_name",
+								"type":   "string"
+							},
+							{
+								"name": "permission",
+								"type": "string"
+							}
+						]
+					},
+					{
+						"name":        "Messages",
+						"model_type":  "hive_model",
+						"primary_key": "id",
+						"data":        [
+							{
+								"id":      1,
+								"from":    "moe",
+								"to":      "steve",
+								"title":   "welcome to my site",
+								"message": "I have granted you blogging permissions"
+							}
+						],
+						"schema":      [
+							{
+								"name": "from",
+								"type": "string"
+							},
+							{
+								"name": "to",
+								"type": "string"
+							},
+							{
+								"name": "title",
+								"type": "string"
+							},
+							{
+								"name": "message",
+								"type": "string"
+							}
+						]
+					}
+				]
+			},
+			"hives":     {
+				"members": {
+					"actions": [
+						{
+							"name":       "rest",
+							"rest":       true,
+							"model_name": "Members"
+						},
+						{
+							"name":       "acl",
+							"rest":       true,
+							"model_type": "mongoose",
+							"model_name": "Members_ACL"
+						},
+
+						{
+							"name":       "messages",
+							"rest":       true,
+							"model_type": "hive_model",
+							"model_name": "Messages"
+						}
+					]
+				},
+
+				"member_pages": {
+					"config":  {
+						"root_route": "/member"
+					},
+					"actions": {
+
+						"login": {
+							"config":           {
+								"routes": {
+									"get": "*/login"
+								}
+							},
+							"template_content": "<form method=\"/member/login\"><h1>Log In</h1><p>Username <input type=\"text\" name=\"userame\" /></p><p>Password <input type=\"password\" name=password\" /></p></form>"
+						}
+					}
+				}
+			}
+		}
+	}
+
+}

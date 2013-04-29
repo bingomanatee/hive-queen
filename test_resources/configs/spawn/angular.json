@@ -1,0 +1,31 @@
+{
+	"frames": {
+		"alpha": {
+			"hives": {
+				"phi": {
+					"actions": [
+						{"name":       "bob",
+							"angular": {
+								"controller": "FooController"
+							}
+						},
+						{
+							"name":    "ray",
+							"angular": {
+								"controller": {
+									"name": "Albert"
+								},
+								"app":        {
+									"name": "Brooks",
+									"deps": [
+										"ui", "foo", "bar"]
+								}
+							}
+						}
+					]
+				}
+			}
+		}
+	}
+
+}

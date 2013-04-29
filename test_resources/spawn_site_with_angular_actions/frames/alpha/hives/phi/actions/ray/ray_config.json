@@ -1,18 +1,5 @@
 {
     "name": "ray",
-    "angular": {
-        "controller": {
-            "name": "Albert"
-        },
-        "app": {
-            "name": "Brooks",
-            "deps": [
-                "ui",
-                "foo",
-                "bar"
-            ]
-        }
-    },
     "routes": {
         "get": [
             "*/ray"

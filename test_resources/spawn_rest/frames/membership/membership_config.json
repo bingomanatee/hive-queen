@@ -1,4 +1,4 @@
 {
     "name": "membership",
-    "route_root": "/membership"
+    "root_route": "/membership"
 }

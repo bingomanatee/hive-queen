@@ -2,6 +2,16 @@ var _ = require('underscore');
 var util = require('util');
 var gate = require('gate');
 
+/** ****************************
+ * MODEL: <%- JSON.stringify(model, true, 4) %>
+ * ( <%= model_type %> )
+ *
+ * NOTE - this script assumes that "non-truthy" ids - blank strings, zero, null --
+ * are not legitimate keys for storing data in your repo.
+ * If this is not true adjust the script accordingly.
+ *
+ * **************************** */
+
 module.exports = {
 
 	/**
@@ -15,6 +25,57 @@ module.exports = {
 
 	_model: function(){
 		return this.model('<%= model_name %>');
+	},
+
+	_id_from_context: function(context, data){
+		var id;
+
+		id = context[this._url_param_name()];
+
+		if (!id) {
+			id = context[this._key_name()];
+		}
+
+		<% if (model_type == 'hive_model'){ %>
+		if (!id && data) {
+			id = this._model()._make_pk(data);
+		}
+		<% } %>
+
+		return id;
+	},
+
+	_record_from_context: function (context){
+
+		var data = {};
+
+ 		<% if (model && model.schema) { 		 %>
+ 		// console.log('getting data from context %s', util.inspect(context, false, 0));
+
+ 		<% _.each(model.schema, function(field_def, key){ %>
+
+			<% if (_.isString(field_def)){ %>
+
+			data['<%= field_def %>'] = context['<%= field_def %>'];
+
+			<% } else if (_.isObject(field_def)){ %>
+
+			data['<%= field_def.name %>'] = context['<%= field_def.name %>'];
+
+			<% } else { %>
+			// strange field type <%= JSON.stringify(field_def) %> -- <%= key %>
+
+			<% } %>
+
+ 		<% }) %>
+
+ 		<% } else { %>
+
+ 		throw new Error ('!!!! add code to extract record from context !!!!!');
+
+ 		<% } %>
+
+ 		return data;
 	},
 
 	/**
@@ -52,34 +113,66 @@ module.exports = {
 	on_get_validate: function(context, cb){
 		var self = this;
 
-		if (!context.hasOwnProperty(this._url_param_name())){
-			cb(new Error('cannot find ' + this._url_param_name() + ' in request'));
+		<% if (!allow_all) { %>
+		var id =  this._id_from_context(context);
+
+		if (!id){
+			cb(new Error('cannot find primary key in request'));
 		} else {
 			cb();
 		}
-
+		<% } else { %>cb();<% } %>
 	},
 
 	on_get_input: function(context, cb){
 		var self = this;
+<!-- model_type: <%= model_type %> -->
+		var id =  this._id_from_context(context);
+		<% if (allow_all) { %>
+		if (!id){
+		<% switch(model_type){
+		case 'mongoose': %>
 
+		this._model().find({}, function(err, records){
+			if (err) return cb(err);
+			context.$out = records;
+			return cb();
+		});
+		<%  break;
+		case 'hive_model': %>
+			context.$out = this._model().all().records();
+			return cb();
+		<%  break;
+		 default: %>
+
+		 	//@TODO: inject the part of your model that gets all record
+			context.$out = this._model().all();
+			return cb();
+
+		<% } %>
+		}
+
+		<% } // end allow_all %>
 		<% switch(model_type ){
 		case 'mongoose': %>
-		this._model().findById(context[this._url_param_name()], function(err, record){
+		this._model().findById(id, function(err, record){
 			if (err) return cb(err);
 			context.$out = record;
 			cb();
 		})
 		<% break;
 		case 'hive_model': %>
-		this._model().get(context[this._url_param_name()], function(err, record){
+		this._model().get(id, function(err, record){
 			if (err) return cb(err);
 			context.$out = record;
 			cb();
 		})
 		<% break;
 		default: %>
-		this._model().get(context[this._url_param_name()], function(err, record){
+
+		// -- presuming your model has a 'get' method; might need to customize.
+
+		this._model().get(id, function(err, record){
 			if (err) return cb(err);
 			context.$out = record;
 			cb();
@@ -104,30 +197,42 @@ module.exports = {
 
 	on_put_validate: function(context, cb){
 		var self = this;
-
-		if (!context.hasOwnProperty(this._url_param_name())){
-			cb(new Error('cannot find ' + this._url_param_name() + ' in request to update'));
-		} else {
-			cb(null, context);
+		var id =  this._id_from_context(context);
+		<% if (model_type ==  'hive_model'){ %>
+		if(!id) {
+			console.log('warning - no ID in URL');
 		}
-
+		cb();
+		<% } else { %>
+		if (!id){
+			return cb(new Error('must inject record ID with hive-model models;'));
+		} else {
+			cb();
+		}
+		<% } %>
 	},
 
 	on_put_input: function(context, cb){
+		var data = this._record_from_context(context);
 
-		this._model().get(context[this._url_param_name()], function(err, record){
-			if (err) return cb(err);
-			context.$out = record;
-			cb(null, context);
-		})
-
+		<% switch(model_type ){
+		case 'mongoose': %>
+		var id = this._id_from_context(context, data);
+		data[this._key_name()] = id;
+		context.$out = new this._model()(data);
+		<% break;
+		case 'hive_model': %>
+		var id = this._id_from_context(context, data);
+		data[this._key_name()] = id;
+		context.$out = data;
+		<% break;
+		default: %>
+		var id = this._id_from_context(context, data);
+		data[this._key_name()] = id;
+		context.$out = data;
+		<% } %>
+ 		cb();
 	},
-
-	/**
-	 * note - this generic template assumes you only want to update
-	 * the fields in the record that were originally present.
-	 * Use more specific updating methods for application specific updating
-	 */
 
 	on_put_process: function(context, cb){
 		var self = this;
@@ -144,18 +249,12 @@ module.exports = {
 		context.$out.save(cb);
 		<% break;
 		case 'hive_model': %>
-			_.keys(context.$out).forEach(function(key){
-				if (key == this._model()._pk) return;
-				if (context.hasOwnProperty(key)){
-					context.$out[key] = context[key];
-				}
-			})
 
-		this._model().update(context.$out, function(err, records){
+		this._model().put(context.$out, function(err, record){
 			if (err) {
 			 	cb(err)
 			} else {
-				context.$out = records[0];
+				context.$out = record;
 				cb();
 			}
 		});
@@ -186,61 +285,70 @@ module.exports = {
 
 	on_post_validate: function(context, cb){
 		var self = this;
-		// there are no qualifiers for new records
-		cb(null, context);
+		//@TODO: validate content
+		cb();
 	},
 
 	on_post_input: function(context, cb){
-		var self = this;
-		// no existing record to work with
-		cb(null, context);
+		var data = this._record_from_context(context);
+
+		<% switch(model_type ){
+		case 'mongoose': %>
+		context.$out = data;
+		<% break;
+		case 'hive_model': %>
+
+		context.$out = data;
+		var id =  this._id_from_context(context, data);
+
+		if (!id){
+			return cb(new Error('must inject record ID with hive-model models;'));
+		}
+		data[this._key_name()] = id;
+		context.$out = data;
+		cb();
+		<% break;
+		default: %>
+		context.$out = data;
+
+ 		cb();
+		<% } %>
+
 	},
 
 	on_post_process: function(context, cb){
 		var self = this;
 
-
 		<% switch(model_type ){
 		case 'mongoose': %>
-
-		var data = {};
-
-		throw new Error('!!!!!!must populate new record here!!!!!!');
-
-		var record = new (this._model())(data);
-		record.save(function(err){
-		   context.$out = record;
-		   cb(err);
-		});
-
-		context.$out.save(cb);
+		this._model().findByIdAndUpdate(this._id_from_context(context, context.$out), context.$out, function(err,
+		record){
+			if (err) return cb(err);
+		})
 		<% break;
 		case 'hive_model': %>
 
-		var data = _.reduce(_.clone(context), function(out, value, key){
-			if (/^\$/.test(key) || _.isFunction(value)) {
-				return out;
-			};
-
-			out[key] = value;
-			return out;
-
-		}, {});
-
-		this._model().put(data, function(err, records){
+		this._model().put(context.$out, function(err, record){
 			if (err) {
 			 	cb(err)
 			} else {
-				context.record = records[0];
+				context.$out = record;
 				cb();
 			}
 		});
 
 		<% break;
 		default: %>
-		var data = {};
+		// presumes your model has a "put" method; if not, revise...
 
-			throw new Error('!!!!!! MUST WRITE ADD MODEL IO !!!!!!!');
+		this._model().put(context.$out, function(err, record){
+			if (err) {
+			 	cb(err)
+			} else {
+				context.$out = record;
+				cb();
+			}
+		});
 
 		<% } %>
 		cb(null, context);
@@ -256,9 +364,12 @@ module.exports = {
 
 	on_delete_validate: function(context, cb){
 		var self = this;
+		var id = this._id_from_context(context);
 
-		if (!context.hasOwnProperty(this._url_param_name())){
-			cb(new Error('cannot find ' + this._url_param_name() + ' in request'));
+		console.log('odvid: %s', id);
+
+		if (!id){
+			cb(new Error('cannot find primary in request to delete'));
 		} else {
 			cb();
 		}
@@ -266,24 +377,26 @@ module.exports = {
 
 	on_delete_input: function(context, cb){
 		var self = this;
+		var id = this._id_from_context(context);
 
 		<% switch(model_type ){
 		case 'mongoose': %>
-		this._model().findById(context[this._url_param_name()], function(err, record){
+		this._model().findById(id, function(err, record){
 			if (err) return cb(err);
 			context.$out = record;
 			cb();
 		})
 		<% break;
 		case 'hive_model': %>
-		this._model().get(context[this._url_param_name()], function(err, record){
+		this._model().get(id, function(err, record){
 			if (err) return cb(err);
 			context.$out = record;
 			cb();
 		})
 		<% break;
 		default: %>
-		this._model().get(context[this._url_param_name()], function(err, record){
+		// @TODO presuming your model has a "get" method; if not, revise
+		this._model().get(id, function(err, record){
 			if (err) return cb(err);
 			context.$out = record;
 			cb();
@@ -302,15 +415,12 @@ module.exports = {
 		<% break;
 		case 'hive_model': %>
 
-		var data = {};
-
-		throw new Error('!!!!!!must populate new record here!!!!!!');
-
 		this._model().delete(context.$out, function(err, record){
+			console.log('deleting %s: record %s', util.inspect(context.$out), util.inspect(record));
 			if (err) {
 			 	cb(err)
 			} else {
-				context.$out = record
+				context.$out = record;
 				cb();
 			}
 		});
@@ -319,7 +429,16 @@ module.exports = {
 		default: %>
 		var data = {};
 
-			throw new Error('!!!!!! MUST WRITE ADD MODEL IO !!!!!!!');
+		// @TODO: presumes your model has a delete model; if not, revise script
+
+		this._model().delete(context.$out, function(err, record){
+			if (err) {
+			 	cb(err)
+			} else {
+				context.$out = record;
+				cb();
+			}
+		});
 
 		<% } %>
 	},
@@ -327,6 +446,7 @@ module.exports = {
 	on_delete_output: function(context, cb){
 		var self = this;
 
+		this._send_JSON(context, cb, 'delete')
 		cb();
 	}
 

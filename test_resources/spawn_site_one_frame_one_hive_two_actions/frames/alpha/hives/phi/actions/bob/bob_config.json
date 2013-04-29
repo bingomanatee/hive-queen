@@ -1,8 +1,5 @@
 {
     "name": "bob",
-    "angular": {
-        "controller": "FooController"
-    },
     "routes": {
         "get": [
             "*/bob"
