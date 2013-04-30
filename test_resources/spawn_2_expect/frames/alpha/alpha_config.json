@@ -1,5 +1,5 @@
 {
     "foo": 1,
     "bar": 2,
-    "root_route": "/alpha"
+    "base_route": "/alpha"
 }

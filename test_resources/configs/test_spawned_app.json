@@ -117,7 +117,7 @@
 
 				"member_pages": {
 					"config":  {
-						"root_route": "/member"
+						"base_route": "/member"
 					},
 					"actions": {
 

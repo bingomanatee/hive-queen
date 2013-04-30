@@ -1,4 +1,4 @@
 {
     "name": "alpha",
-    "root_route": "/alpha"
+    "base_route": "/alpha"
 }
