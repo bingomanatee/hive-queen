@@ -1,7 +1,7 @@
 {
   "name": "hive-queen",
   "description": "a directory spawner for hive-mvc",
-  "version": "0.0.1",
+  "version": "0.0.1b",
   "private": false,
   "scripts": {
     "test": "tap ./test",
@@ -10,11 +10,12 @@
   "dependencies": {
     "underscore": "*",
     "async": "~0.1.22",
-    "gate": "*",
+	  "gate": "~0.3.0",
     "mkdirp": ">=0.3.4",
     "dank-copyfile": "0.0.1",
     "rmdir": ">0.1",
-    "ejs": "~0.8.3"
+    "ejs": "~0.8.3",
+    "hive-parser": "0.0.1"
   },
   "devDependencies": {
     "tap": ">=0.3",
