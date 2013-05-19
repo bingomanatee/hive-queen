@@ -1,0 +1,45 @@
+{
+	"frames": {
+		"alpha": {
+			"config": {
+				"foo": 1,
+				"bar": 2
+			},
+			"hives":  {
+				"phi": {
+					"config": {
+						"a": 1,
+						"b": 2
+					}
+				},
+				"rho": {
+					"config": {
+						"c": 3,
+						"d": 4
+					}
+				}
+			}
+		},
+		"beta": {
+			"config": {
+				"foo": 5,
+				"bar": 6
+			},
+			"hives":  {
+				"zane": {
+					"config": {
+						"a": 7,
+						"b": 8
+					}
+				},
+				"bob": {
+					"config": {
+						"c": 9,
+						"d": 0
+					}
+				}
+			}
+		}
+	}
+
+}

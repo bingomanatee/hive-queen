@@ -1,0 +1,25 @@
+{
+	"frames": {
+		"alpha": {
+			"config": {
+				"foo": 1,
+				"bar": 2
+			},
+			"hives":  {
+				"phi": {
+					"config": {
+						"a": 1,
+						"b": 2
+					}
+				},
+				"rho": {
+					"config": {
+						"c": 3,
+						"d": 4
+					}
+				}
+			}
+		}
+	}
+
+}
