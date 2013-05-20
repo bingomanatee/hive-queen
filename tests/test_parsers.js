@@ -15,7 +15,7 @@ var root = path.resolve(__dirname, '../test_resources');
 
 var run_tests = [, 1, 1, 1, 1, 1];
 var compare_files = [, 1, 1, 1, 1, 1];
-var save_output = [, 0, 0, 0, 0, 0];
+var save_output = [, 0, 0, 0, 0, 1];
 
 /* ************************* TESTS ****************************** */
 
@@ -172,7 +172,7 @@ if (run_tests[3]) {
  * TEST 4
  *  - one frame with config
  *  - one hive with config and actions
- *  - no actions
+ *  - two actions
  */
 
 if (run_tests[4]) {
@@ -223,7 +223,8 @@ if (run_tests[4]) {
  * TEST 5
  *  - one frame with config
  *  - one hive with config and actions
- *  - no actions
+ *  - two actions
+ *  - one model resource (hive_model)
  */
 
 if (run_tests[5]) {

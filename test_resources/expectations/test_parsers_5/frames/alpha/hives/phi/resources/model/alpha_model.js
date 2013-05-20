@@ -13,7 +13,14 @@ var _DEBUG = false;
 /* ********* EXPORTS ******** */
 
 module.exports = function (apiary, cb) {
-	var model = [];
+
+	
+		model = apiary.Model({
+		name:    'alpha',
+		_pk:     'id'
+		}
+	);
 
 	cb(null, model);
+		
 } // end export function
