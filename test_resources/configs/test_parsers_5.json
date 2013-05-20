@@ -1,0 +1,38 @@
+{
+	"frames": {
+		"alpha": {
+			"config": {
+				"foo": 1,
+				"bar": 2
+			},
+			"hives":  {
+				"phi": {
+					"config":    {
+						"a": 1,
+						"b": 2
+					},
+					"resources": {
+						"model": {
+							"alpha": {}
+						}
+					},
+					"actions":   {
+						"bob": {
+							"config": {
+								"e": 10,
+								"f": 11
+							}
+						},
+						"ray": {
+							"config": {
+								"g": 12,
+								"h": 13
+							}
+						}
+					}
+				}
+
+			}
+		}
+	}
+}
