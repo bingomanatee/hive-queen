@@ -12,8 +12,11 @@
 						"b": 2
 					},
 					"resources": {
-						"model": {
+						"model":        {
 							"alpha": {}
+						},
+						"view_helper": {
+							"beta": { "weight": 50}
 						}
 					},
 					"actions":   {
