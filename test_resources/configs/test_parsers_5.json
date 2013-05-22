@@ -1,22 +1,43 @@
 {
 	"frames": {
 		"alpha": {
-			"config": {
+			"config":    {
 				"foo": 1,
 				"bar": 2
+
 			},
-			"hives":  {
+			"resources": {
+				"model":        {
+					"foot": {
+
+					}
+				},
+				"view_helper": {
+					"gym": {}
+				},
+				"mixin":       {
+					"maron": {
+
+					}
+				}
+			},
+			"hives":     {
 				"phi": {
 					"config":    {
 						"a": 1,
 						"b": 2
 					},
 					"resources": {
-						"model":        {
+						"model":       {
 							"alpha": {}
 						},
 						"view_helper": {
-							"beta": { "weight": 50}
+							"beta": {
+								"weight": 50
+							}
+						},
+						"mixin":       {
+							"gamma": {}
 						}
 					},
 					"actions":   {
