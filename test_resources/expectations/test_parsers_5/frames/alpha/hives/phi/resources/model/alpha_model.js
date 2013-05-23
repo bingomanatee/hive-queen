@@ -13,7 +13,6 @@ var _DEBUG = false;
 /* ********* EXPORTS ******** */
 
 module.exports = function (apiary, cb) {
-
 	
 		model = apiary.Model({
 		name:    'alpha',
@@ -23,4 +22,4 @@ module.exports = function (apiary, cb) {
 
 	cb(null, model);
 		
-} // end export function
+}; // end export function

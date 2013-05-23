@@ -13,9 +13,11 @@ var _DEBUG = false;
 
 var root = path.resolve(__dirname, '../test_resources');
 
-var run_tests     = [, 0, 0, 0, 0, 1];
+// NOTE - IF YOU DON'T compare_files, save_output is automatically true
+
+var run_tests = [, 1, 1, 1, 1, 1];
 var compare_files = [, 1, 1, 1, 1, 1];
-var save_output   = [, 0, 0, 0, 0, 1];
+var save_output =[]; //[, 1, 1, 1, 1, 1];
 
 /* ************************* TESTS ****************************** */
 
@@ -65,4 +67,4 @@ _.each(_.range(1, 6), function (index) {
 		});// end tap.test 1
 	}
 
-})
+});

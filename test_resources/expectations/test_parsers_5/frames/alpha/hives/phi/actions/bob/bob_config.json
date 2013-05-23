@@ -1,4 +1,18 @@
 {
+    "routes": {
+        "get": [
+            "*/config"
+        ],
+        "put": [
+            "*/config"
+        ],
+        "post": [
+            "*/config"
+        ],
+        "delete": [
+            "*/config"
+        ]
+    },
     "e": 10,
     "f": 11
 }

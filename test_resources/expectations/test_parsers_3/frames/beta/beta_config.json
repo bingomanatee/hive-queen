@@ -1,4 +1,5 @@
 {
     "foo": 5,
-    "bar": 6
+    "bar": 6,
+    "base_route": "/beta"
 }

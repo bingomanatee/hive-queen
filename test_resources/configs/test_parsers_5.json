@@ -7,9 +7,13 @@
 
 			},
 			"resources": {
-				"model":        {
+				"model":       {
 					"foot": {
-
+						"model_type": "hive_model_mongoose",
+						"schema":     {
+							"name":    "String",
+							"created": "Date"
+						}
 					}
 				},
 				"view_helper": {

@@ -13,14 +13,16 @@ var _DEBUG = false;
 /* ********* EXPORTS ******** */
 
 module.exports = function (apiary, cb) {
-
 	
-		model = apiary.Model({
-		name:    'foot',
-		_pk:     'id'
+	Mongoose_Model(
+		{
+			name: 'foot'
 		}
-	);
+		, {
+			mongoose:   apiary.get_config('mongoose'),
+			schema_def: {"name":"String","created":"Date"}
+			},
+		apiary.dataspace,
+		cb);
 
-	cb(null, model);
-		
-} // end export function
+}; // end export function
